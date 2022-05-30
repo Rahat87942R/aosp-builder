@@ -10,9 +10,21 @@ task:
     name: aosp # Project name
     timeout_in: 120m # Otherwise it will timeout at 60m automatically, 120m highest in free account
     container:
-      image: apon77/aosp:latest # It has built-in setup environment + repo, aria2, rclone, pigz, username ci, and email ci@ci.ci [You can use your own docker image if you want, or you can use this one too!]
+      image: ubuntu:latest # It has built-in setup environment + repo, aria2, rclone, pigz, username ci, and email ci@ci.ci [You can use your own docker image if you want, or you can use this one too!]
       cpu: 8  #8 or less cpu for dummy build, 8 cpu for the final build, 8cpu highest for free accounts. Don't try to use more than 8cpu as free user, you may get blocked by ci.
       memory: 32G # So that we can have ram when needed, 32G highest
+    install_rclone_script: 
+      - curl https://rclone.org/install.sh | sudo bash
+      - curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip
+      - unzip rclone-current-linux-amd64.zip
+      - cd rclone-*-linux-amd64
+    install_aria2_script:
+      - sudo apt update
+      - sudo apt install -y aria2
+      - aria2c --version
+    install_pigz_scripts:
+      - sudo apt-get update -y
+      - sudo apt-get install -y pigz
     download_ccache_background_script: # To download ccache in background
       - ./download_ccache # Ccache download script
     sync_script: # To sync source
